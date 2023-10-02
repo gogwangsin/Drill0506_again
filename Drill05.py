@@ -36,9 +36,14 @@ def reset_world():
     frame = 0
     action = 3
 
-    sx, sy = cx, cy # p1 : 시작점
+    set_new_target_arrow()
+
+
+def set_new_target_arrow():
+    global sx, sy, hx, hy, t
+    sx, sy = cx, cy  # p1 : 시작점
     # hx, hy = 50, 50
-    hx, hy = random.randint(0,TUK_WIDTH - 1), random.randint(0,TUK_HEIGHT - 1) # p2 : 끝점.
+    hx, hy = random.randint(0, TUK_WIDTH - 1), random.randint(0, TUK_HEIGHT - 1)  # p2 : 끝점.
     t = 0.0
 
 
@@ -63,13 +68,15 @@ def update_world():
         cx = (1 - t) * sx + t * hx  # 시작점과 끝점을 기억해야함.
         cy = (1 - t) * sy + t * hy  # cx는 시작 x와 끝 x를 1-t:t의 비율로 섞은 위치
         t += 0.001
+    else:  # 목적지에 도달했을 때
+        cx, cy = hx, hy  # 강제로 캐릭터 위치를 목적지 위치와 정확히 일치시킴.
+        set_new_target_arrow()
 
 
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
 hide_cursor()
 load_resources()
 reset_world()
-
 
 while running:
     render_world()  # 월드의 현재 내용을 그린다.
