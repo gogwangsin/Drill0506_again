@@ -24,7 +24,7 @@ def handle_events():
     pass
 
 
-def reset_world():
+def reset_world():  # 변수 초기화 initalization
     global running, cx, cy, frame
     global hx, hy
     global sx, sy
@@ -34,15 +34,15 @@ def reset_world():
     running = True
     cx, cy = TUK_WIDTH // 2, TUK_HEIGHT // 2
     frame = 0
-    action = 3
+    action = 3  # 애니메이션 정지한 상태 default
 
     set_new_target_arrow()
 
 
 def set_new_target_arrow():
     global sx, sy, hx, hy, t
-    sx, sy = cx, cy  # p1 : 시작점
-    # hx, hy = 50, 50
+    sx, sy = cx, cy  # p1 : 시작점 - 시작 위치 == 처음 캐릭터 위치
+    # hx, hy = 50, 50 # 테스트 용도 
     hx, hy = random.randint(0, TUK_WIDTH - 1), random.randint(0, TUK_HEIGHT - 1)  # p2 : 끝점.
     t = 0.0
 
@@ -51,7 +51,7 @@ def render_world():
     clear_canvas()
     TUK_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
     arrow.draw(hx, hy)
-    character.clip_draw(frame * 100, 100 * action, 100, 100, cx, cy)
+    character.clip_draw(frame * 100, 100 * action, 100, 100, cx, cy)  # action에 따른 모션 변화 0,1,2,3
     update_canvas()
 
 
@@ -62,14 +62,14 @@ def update_world():
     global action
 
     frame = (frame + 1) % 8
-    action = 1 if cx < hx else 0
+    action = 1 if cx < hx else 0  # 목적지 x보다 작은 x라면 액션 [1]로 바꾸기
 
     if t <= 1.0:
         cx = (1 - t) * sx + t * hx  # 시작점과 끝점을 기억해야함.
         cy = (1 - t) * sy + t * hy  # cx는 시작 x와 끝 x를 1-t:t의 비율로 섞은 위치
-        t += 0.001
+        t += 0.001  # t가 0일 때 처음 위치, t가 1일 때 목적 위치
     else:  # 목적지에 도달했을 때
-        cx, cy = hx, hy  # 강제로 캐릭터 위치를 목적지 위치와 정확히 일치시킴.
+        cx, cy = hx, hy  # 강제로 캐릭터 위치를 목적지 위치와 정확히 일치시킴. 오차 해결
         set_new_target_arrow()
 
 
