@@ -32,6 +32,7 @@ def reset_world():  # 변수 초기화 initalization
     global t
     global action
     global mx, my
+    global points
 
     mx, my = 0, 0
     running = True
@@ -39,23 +40,27 @@ def reset_world():  # 변수 초기화 initalization
     frame = 0
     action = 3  # 애니메이션 정지한 상태 default
 
+    points = [(100, 700), (800, 600), (500, 100)]
+
     # set_new_target_arrow()
 
 
-# def set_new_target_arrow():
-#     global sx, sy, hx, hy, t
-#     global action
-#     global frame
-#     sx, sy = cx, cy  # p1 : 시작점 - 시작 위치 == 처음 캐릭터 위치
-#     # hx, hy = 50, 50 # 테스트 용도
-#     hx, hy = random.randint(0, TUK_WIDTH - 1), random.randint(0, TUK_HEIGHT - 1)  # p2 : 끝점.
-#     t = 0.0
-#     action = 1 if sx < hx else 0  # 목적지 x보다 작은 x라면 액션 [1]로 바꾸기
-#     frame = 0
+def set_new_target_arrow():
+    global sx, sy, hx, hy, t
+    global action
+    global frame
+    sx, sy = cx, cy  # p1 : 시작점 - 시작 위치 == 처음 캐릭터 위치
+    # hx, hy = 50, 50 # 테스트 용도
+    hx, hy = random.randint(0, TUK_WIDTH - 1), random.randint(0, TUK_HEIGHT - 1)  # p2 : 끝점.
+    t = 0.0
+    action = 1 if sx < hx else 0  # 목적지 x보다 작은 x라면 액션 [1]로 바꾸기
+    frame = 0
 
 def render_world():
     clear_canvas()
     TUK_ground.draw(TUK_WIDTH // 2, TUK_HEIGHT // 2)
+    for p in points:
+        arrow.draw(p[0], p[1])
     arrow.draw(mx, my)
     character.clip_draw(frame * 100, 100 * action, 100, 100, cx, cy)  # action에 따른 모션 변화 0,1,2,3
     update_canvas()
