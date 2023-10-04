@@ -23,7 +23,7 @@ def handle_events():
         elif event.type == SDL_MOUSEMOTION:
             mx, my = event.x, TUK_HEIGHT - 1 - event.y
         elif event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
-            points.append((event.x, TUK_HEIGHT - 1 - event.y)) # 클릭된 위치를 새로운 점으로 추가
+            points.append((event.x, TUK_HEIGHT - 1 - event.y))  # 클릭된 위치를 새로운 점으로 추가
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
     pass
@@ -52,20 +52,18 @@ def set_new_target_arrow():
     global frame
     global target_exists
 
-    if points: # 포인트 리스트 안에 남아있는 점이 있으면.
+    if points:  # 포인트 리스트 안에 남아있는 점이 있으면.
         sx, sy = cx, cy  # p1 : 시작점 - 시작 위치 == 처음 캐릭터 위치
         # hx, hy = 50, 50 # 테스트 용도
-        hx, hy = points[0] # p2 : 끝점.
+        hx, hy = points[0]  # p2 : 끝점.
         t = 0.0
         action = 1 if sx < hx else 0  # 목적지 x보다 작은 x라면 액션 [1]로 바꾸기
         frame = 0
         target_exists = True
     else:
-        action = 3 if action == 1 else 2 # 이전에 소년이 우쪽으로 이동중이였으면, IDLE 동작시 우측을 바라보도록
+        action = 3 if action == 1 else 2  # 이전에 소년이 우쪽으로 이동중이였으면, IDLE 동작시 우측을 바라보도록
         frame = 0
         target_exists = False
-
-
 
 
 def render_world():
@@ -91,9 +89,9 @@ def update_world():
             t += 0.001  # t가 0일 때 처음 위치, t가 1일 때 목적 위치
         else:  # 목적지에 도달했을 때
             cx, cy = hx, hy  # 강제로 캐릭터 위치를 목적지 위치와 정확히 일치시킴. 오차 해결
-            del points[0] # 목표지점에 왔기 때문에, 더 이상 필요없는 점을 삭제
+            del points[0]  # 목표지점에 왔기 때문에, 더 이상 필요없는 점을 삭제
             set_new_target_arrow()
-    elif points: # 목표 지점에 없는 상황에서, 새로운 목표 지점이 생기면...
+    elif points:  # 목표 지점에 없는 상황에서, 새로운 목표 지점이 생기면...
         set_new_target_arrow()
 
 
