@@ -48,12 +48,21 @@ def set_new_target_arrow():
     global sx, sy, hx, hy, t
     global action
     global frame
-    sx, sy = cx, cy  # p1 : 시작점 - 시작 위치 == 처음 캐릭터 위치
-    # hx, hy = 50, 50 # 테스트 용도
-    hx, hy = points[0] # p2 : 끝점.
-    t = 0.0
-    action = 1 if sx < hx else 0  # 목적지 x보다 작은 x라면 액션 [1]로 바꾸기
-    frame = 0
+    global target_exists
+
+    if points: # 포인트 리스트 안에 남아있는 점이 있으면.
+        sx, sy = cx, cy  # p1 : 시작점 - 시작 위치 == 처음 캐릭터 위치
+        # hx, hy = 50, 50 # 테스트 용도
+        hx, hy = points[0] # p2 : 끝점.
+        t = 0.0
+        action = 1 if sx < hx else 0  # 목적지 x보다 작은 x라면 액션 [1]로 바꾸기
+        frame = 0
+        target_exists = True
+    else:
+        action = 3 if action == 1 else 2 # 이전에 소년이 우쪽으로 이동중이였으면, IDLE 동작시 우측을 바라보도록
+        frame = 0
+        target_exists = False
+
 
 def render_world():
     clear_canvas()
@@ -71,14 +80,15 @@ def update_world():
     global t
 
     frame = (frame + 1) % 8
-
-    if t <= 1.0:
-        cx = (1 - t) * sx + t * hx  # 시작점과 끝점을 기억해야함.
-        cy = (1 - t) * sy + t * hy  # cx는 시작 x와 끝 x를 1-t:t의 비율로 섞은 위치
-        t += 0.001  # t가 0일 때 처음 위치, t가 1일 때 목적 위치
-    else:  # 목적지에 도달했을 때
-        cx, cy = hx, hy  # 강제로 캐릭터 위치를 목적지 위치와 정확히 일치시킴. 오차 해결
-        set_new_target_arrow()
+    if target_exists:
+        if t <= 1.0:
+            cx = (1 - t) * sx + t * hx  # 시작점과 끝점을 기억해야함.
+            cy = (1 - t) * sy + t * hy  # cx는 시작 x와 끝 x를 1-t:t의 비율로 섞은 위치
+            t += 0.001  # t가 0일 때 처음 위치, t가 1일 때 목적 위치
+        else:  # 목적지에 도달했을 때
+            cx, cy = hx, hy  # 강제로 캐릭터 위치를 목적지 위치와 정확히 일치시킴. 오차 해결
+            del points[0] # 목표지점에 왔기 때문에, 더 이상 필요없는 점을 삭제
+            set_new_target_arrow()
 
 
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
