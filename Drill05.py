@@ -26,8 +26,6 @@ def handle_events():
 
 def reset_world():  # 변수 초기화 initalization
     global running, cx, cy, frame
-    global hx, hy
-    global sx, sy
     global t
     global action
 
@@ -41,11 +39,14 @@ def reset_world():  # 변수 초기화 initalization
 
 def set_new_target_arrow():
     global sx, sy, hx, hy, t
+    global action
+    global frame
     sx, sy = cx, cy  # p1 : 시작점 - 시작 위치 == 처음 캐릭터 위치
     # hx, hy = 50, 50 # 테스트 용도 
     hx, hy = random.randint(0, TUK_WIDTH - 1), random.randint(0, TUK_HEIGHT - 1)  # p2 : 끝점.
     t = 0.0
-
+    action = 1 if sx < hx else 0  # 목적지 x보다 작은 x라면 액션 [1]로 바꾸기
+    frame = 0
 
 def render_world():
     clear_canvas()
@@ -59,10 +60,8 @@ def update_world():
     global frame
     global cx, cy
     global t
-    global action
 
     frame = (frame + 1) % 8
-    action = 1 if cx < hx else 0  # 목적지 x보다 작은 x라면 액션 [1]로 바꾸기
 
     if t <= 1.0:
         cx = (1 - t) * sx + t * hx  # 시작점과 끝점을 기억해야함.
