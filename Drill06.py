@@ -41,8 +41,7 @@ def reset_world():  # 변수 초기화 initalization
     action = 3  # 애니메이션 정지한 상태 default
 
     points = [(100, 700), (800, 600), (500, 100)]
-
-    # set_new_target_arrow()
+    set_new_target_arrow()
 
 
 def set_new_target_arrow():
@@ -51,7 +50,7 @@ def set_new_target_arrow():
     global frame
     sx, sy = cx, cy  # p1 : 시작점 - 시작 위치 == 처음 캐릭터 위치
     # hx, hy = 50, 50 # 테스트 용도
-    hx, hy = random.randint(0, TUK_WIDTH - 1), random.randint(0, TUK_HEIGHT - 1)  # p2 : 끝점.
+    hx, hy = points[0] # p2 : 끝점.
     t = 0.0
     action = 1 if sx < hx else 0  # 목적지 x보다 작은 x라면 액션 [1]로 바꾸기
     frame = 0
@@ -73,13 +72,13 @@ def update_world():
 
     frame = (frame + 1) % 8
 
-    # if t <= 1.0:
-    #     cx = (1 - t) * sx + t * hx  # 시작점과 끝점을 기억해야함.
-    #     cy = (1 - t) * sy + t * hy  # cx는 시작 x와 끝 x를 1-t:t의 비율로 섞은 위치
-    #     t += 0.001  # t가 0일 때 처음 위치, t가 1일 때 목적 위치
-    # else:  # 목적지에 도달했을 때
-    #     cx, cy = hx, hy  # 강제로 캐릭터 위치를 목적지 위치와 정확히 일치시킴. 오차 해결
-    #     set_new_target_arrow()
+    if t <= 1.0:
+        cx = (1 - t) * sx + t * hx  # 시작점과 끝점을 기억해야함.
+        cy = (1 - t) * sy + t * hy  # cx는 시작 x와 끝 x를 1-t:t의 비율로 섞은 위치
+        t += 0.001  # t가 0일 때 처음 위치, t가 1일 때 목적 위치
+    else:  # 목적지에 도달했을 때
+        cx, cy = hx, hy  # 강제로 캐릭터 위치를 목적지 위치와 정확히 일치시킴. 오차 해결
+        set_new_target_arrow()
 
 
 open_canvas(TUK_WIDTH, TUK_HEIGHT)
